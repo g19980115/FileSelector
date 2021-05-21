@@ -35,7 +35,7 @@ allprojects {
 
 ```
 //AndroidX
-implementation 'com.github.ZLYang110:FileSelector:2.1.2'
+implementation 'com.github.g19980115:FileSelector:2.1.4'
 
  //support
 //implementation 'com.github.ZLYang110:FileSelector:1.0.2'
@@ -50,6 +50,7 @@ implementation 'com.github.ZLYang110:FileSelector:2.1.2'
      *  设置 onlyShowFolder() 只显示文件夹 后 默认设置了onlySelectFolder（）
      *  设置 onlySelectFolder() 只能选择文件夹 后 默认设置了isSingle（）
      *  设置 isSingle() 只能选择一个 后 再设置了setMaxCount（） 不生效
+     *  设置 setShowChildCount(true)//是否显示文件夹内子文件数量，会影响加载速度，默认false
      *
      */
  FileSelector.from(this)
