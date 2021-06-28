@@ -576,6 +576,12 @@ public final class FileUtils {
         return DateUtils.formatDate(cal.getTime(), format);
     }
 
+    public static String getDateTime(long lastModified, String format) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(lastModified);
+        return DateUtils.formatDate(cal.getTime(), format);
+    }
+
     /**
      * 比较两个文件的最后修改时间
      */

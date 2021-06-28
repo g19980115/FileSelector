@@ -59,7 +59,9 @@ public class FileListAdapter extends BaseQuickAdapter<EssFile, BaseViewHolder> {
             }
         } else {
             helper.setVisible(R.id.iv_item_file_select_right, false);
-            textView.setText(String.format(getContext().getString(R.string.file_desc), FileUtils.getDateTime(item.getAbsolutePath()), FileSizeUtil.getAutoFileOrFilesSize(item.getFile())));
+            textView.setText(String.format(getContext().getString(R.string.file_desc),
+                    FileUtils.getDateTime(item.lastModified(), "yyyy-MM-dd HH:mm"),
+                    FileSizeUtil.FormetFileSize(item.length())));
         }
         helper.setText(R.id.tv_item_file_list, item.getName());
         if (item.isChecked()) {

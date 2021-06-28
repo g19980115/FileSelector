@@ -19,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zlylib.fileselectorlib.bean.EssFile;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -149,6 +151,16 @@ public class DataTool {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R;
     }
 
+    public static boolean isAndroidDataFile(EssFile file) {
+        return isAndroidR() && file.getAbsolutePath().startsWith(
+                Environment.getExternalStorageDirectory().getPath() + "/Android/data/");
+    }
+
+    public static boolean isAndroidDataFile(String file) {
+        return isAndroidR() && file.startsWith(
+                Environment.getExternalStorageDirectory().getPath() + "/Android/data/");
+    }
+
 
     public static String getFileName(Context context, Uri uri) {
         if (uri == null) return "";
@@ -182,5 +194,82 @@ public class DataTool {
             e.printStackTrace();
         }
     }
+
+    public static InputStream getInputStream(Context context, Uri uri) {
+        if (uri == null) return null;
+        try {
+            return context.getContentResolver().openInputStream(uri);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (DataTool.isAndroidR() && ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
+                DocumentFile document = DocumentFile
+                        .fromTreeUri(context, Uri.parse(DataTool.changeToUri(uri.getPath())));
+                if (document == null) return null;
+                try {
+                    return context.getContentResolver().openInputStream(document.getUri());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 读取输入流中的数据写入输出流
+     *
+     * @param storagePath 目标文件路径
+     * @param inputStream 输入流
+     */
+    public static String readInputStream(String storagePath, InputStream inputStream) {
+        if (inputStream == null) return null;
+        File file = new File(storagePath);
+        try {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            if (file.exists()) {
+                file.delete();
+            }
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            // 1.建立通道对象
+            FileOutputStream fos = new FileOutputStream(file);
+            // 2.定义存储空间
+            int available = inputStream.available();
+            if (available != 0) {
+                byte[] buffer = new byte[available];
+                // 3.开始读文件
+                int lenght = 0;
+                while ((lenght = inputStream.read(buffer)) != -1) {// 循环从输入流读取buffer字节
+                    // 将Buffer中的数据写到outputStream对象中
+                    fos.write(buffer, 0, lenght);
+                }
+            }
+            fos.flush();// 刷新缓冲区
+            // 4.关闭流
+            fos.close();
+            inputStream.close();
+            inputStream = null;
+            if (available == 0) {
+                file.delete();
+                return null;
+            }
+
+            return file.getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
 
 }

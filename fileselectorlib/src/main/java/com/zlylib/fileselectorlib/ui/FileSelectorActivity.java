@@ -109,7 +109,8 @@ public class FileSelectorActivity extends AppCompatActivity implements OnItemCli
         abc.setOnLeftIconClickListener(new OnActionBarChildClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                //onBackPressed();
+                finish();
             }
         });
         abc.setOnRightTextClickListener(new OnActionBarChildClickListener() {
@@ -260,15 +261,6 @@ public class FileSelectorActivity extends AppCompatActivity implements OnItemCli
                     if (!item.isDirectory()) {
                         Snackbar.make(mRecyclerView, "您只能选择文件夹", Snackbar.LENGTH_SHORT).show();
                     }
-                    return;
-                }
-                if (SelectOptions.getInstance().isSingle) {
-                    mSelectedFileList.add(item);
-                    mSelectedList.add(item.getAbsolutePath());
-                    Intent result = new Intent();
-                    result.putParcelableArrayListExtra(Const.EXTRA_RESULT_SELECTION, mSelectedFileList);
-                    setResult(RESULT_OK, result);
-                    super.onBackPressed();
                     return;
                 }
                 //选中某文件后，判断是否单选
