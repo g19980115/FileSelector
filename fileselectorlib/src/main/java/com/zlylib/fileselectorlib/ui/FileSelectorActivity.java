@@ -377,7 +377,7 @@ public class FileSelectorActivity extends AppCompatActivity implements OnItemCli
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ANDROID_DATA && resultCode == RESULT_OK) {
             if (data == null) return;

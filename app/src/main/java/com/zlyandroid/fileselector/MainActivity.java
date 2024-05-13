@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                     for (String file :
                             essFileList) {
                         builder.append("path=").append(file).append("\n");
-                        if (DataTool.isAndroidR() && file.startsWith(androidDataPath)) {
+                        if (DataTool.isAndroidDataFile(file)) {
                             DocumentFile df = DataTool.getDocumentFile(this, file);
                             builder.append("size=").append(df.length()).append("\n");
                         } else {
